@@ -5,13 +5,10 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         await client.connect();
-        console.log("Connected correctly to server");
-
     } catch (err) {
         console.log(err);
     }
     finally {
-        console.log("Fechei");
         await client.close();
     }
 }
