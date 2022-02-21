@@ -1,8 +1,9 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://TccServicosPublicos:6KODhv4Z11MGpJkl@servicospublicos.t6crf.mongodb.net/sample_geospatial?retryWrites=true&w=majority";
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+import { MongoClient } from 'mongodb';
 
-async function run() {
+const url = "mongodb+srv://TccServicosPublicos:6KODhv4Z11MGpJkl@servicospublicos.t6crf.mongodb.net/sample_geospatial?retryWrites=true&w=majority";
+const client = new MongoClient(url);
+
+async function connect() {
     try {
         await client.connect();
     } catch (err) {
@@ -13,4 +14,4 @@ async function run() {
     }
 }
 
-run().catch(console.dir);
+connect().catch(console.dir);
