@@ -84,7 +84,7 @@ async function UpdateOne(dbName: string, dbCollection: string, fieldFilter:strin
     } catch (error) {
         console.log(error)
     }finally{
-
+        await client.close();
     }
 }
 
