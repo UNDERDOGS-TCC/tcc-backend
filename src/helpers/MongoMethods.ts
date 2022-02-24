@@ -29,12 +29,14 @@ async function insertData(dbname: string, dbcollection: string, insertDocument: 
     }
 }
 
-async function FindAllData(dbName: string, dbcollection: string){
+async function FindData(dbName: string, dbcollection: string, fieldFilter: string, findFilter: string){
     try {
         await connect();
         const db = client.db(dbName);
         const col = db.collection(dbcollection);
-        const doc = await col.find().toArray();
+        const doc = await col.find({
+            [fieldFilter]: findFilter 
+        }).toArray();
         console.log(doc);
     } catch (error) {
         console.log(error);
@@ -48,12 +50,41 @@ async function DeleteMany(dbName: string, dbCollection: string, fieldFilter: str
         await connect();
         const db = client.db(dbName);
         await db.collection(dbCollection).deleteMany({   
-            fieldFilter: deleteFilter    
+            [fieldFilter]: deleteFilter    
         });
     } catch (error) {
         console.log(error);
     }finally{
         await client.close();
+    }
+}
+
+async function DeleteOne(dbName: string, dbCollection: string, fieldFilter: string, deleteFilter: string) {
+    try {
+        await connect();
+        const db = client.db(dbName);
+        await db.collection(dbCollection).deleteOne({   
+            [fieldFilter]: deleteFilter    
+        });
+    } catch (error) {
+        console.log(error);
+    }finally{
+        await client.close();
+    }
+}
+
+async function UpdateOne(dbName: string, dbCollection: string, fieldFilter:string, valueFilter: string, fieldUpdate: string, valueUpdate: string) {
+    try {
+        await connect();
+        const db = client.db(dbName);
+        const col = db.collection(dbCollection);
+        col.updateOne({ [fieldFilter]: valueFilter}, {
+            [fieldUpdate]: valueUpdate
+        });
+    } catch (error) {
+        console.log(error)
+    }finally{
+
     }
 }
 
