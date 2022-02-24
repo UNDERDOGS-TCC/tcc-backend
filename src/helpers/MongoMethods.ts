@@ -9,9 +9,6 @@ async function connect() {
     } catch (error) {
         console.log(error);
     }
-    finally {
-        await client.close();
-    }
 }
 
 async function insert(dbname: string, dbcollection: string, insertDocument: Document) {
