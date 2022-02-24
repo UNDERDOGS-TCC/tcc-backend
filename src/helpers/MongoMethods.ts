@@ -14,7 +14,7 @@ async function connect() {
     }
 }
 
-async function insertData(dbname: string, dbcollection: string, insertDocument: Document) {
+async function insert(dbname: string, dbcollection: string, insertDocument: Document) {
     try {
         await connect();
         const db = client.db(dbname);
@@ -29,7 +29,7 @@ async function insertData(dbname: string, dbcollection: string, insertDocument: 
     }
 }
 
-async function FindData(dbName: string, dbcollection: string, fieldFilter: string, findFilter: string){
+async function Find(dbName: string, dbcollection: string, fieldFilter: string, findFilter: string){
     try {
         await connect();
         const db = client.db(dbName);
@@ -45,13 +45,20 @@ async function FindData(dbName: string, dbcollection: string, fieldFilter: strin
     }
 }
 
-async function DeleteMany(dbName: string, dbCollection: string, fieldFilter: string, deleteFilter: string) {
+async function Delete(deleteQtd: string, dbName: string, dbCollection: string, fieldFilter: string, deleteFilter: string) {
     try {
         await connect();
         const db = client.db(dbName);
-        await db.collection(dbCollection).deleteMany({   
-            [fieldFilter]: deleteFilter    
-        });
+
+        if (deleteQtd.toLowerCase() === "one") {
+            await db.collection(dbCollection).deleteOne({   
+                [fieldFilter]: deleteFilter    
+           });
+        } else if(deleteQtd.toLowerCase() === "many"){
+            await db.collection(dbCollection).deleteMany({   
+                [fieldFilter]: deleteFilter    
+           });
+        }
     } catch (error) {
         console.log(error);
     }finally{
@@ -59,28 +66,21 @@ async function DeleteMany(dbName: string, dbCollection: string, fieldFilter: str
     }
 }
 
-async function DeleteOne(dbName: string, dbCollection: string, fieldFilter: string, deleteFilter: string) {
-    try {
-        await connect();
-        const db = client.db(dbName);
-        await db.collection(dbCollection).deleteOne({   
-            [fieldFilter]: deleteFilter    
-        });
-    } catch (error) {
-        console.log(error);
-    }finally{
-        await client.close();
-    }
-}
-
-async function UpdateOne(dbName: string, dbCollection: string, fieldFilter:string, valueFilter: string, fieldUpdate: string, valueUpdate: string) {
+async function Update(updateQtd: string, dbName: string, dbCollection: string, fieldFilter:string, valueFilter: string, fieldUpdate: string, valueUpdate: string) {
     try {
         await connect();
         const db = client.db(dbName);
         const col = db.collection(dbCollection);
-        col.updateOne({ [fieldFilter]: valueFilter}, {
-            [fieldUpdate]: valueUpdate
-        });
+
+        if (updateQtd.toLowerCase() === "one") {
+            col.updateOne({ [fieldFilter]: valueFilter}, {
+                [fieldUpdate]: valueUpdate
+            });
+        } else if(updateQtd.toLowerCase() === "many"){
+            col.updateMany({ [fieldFilter]: valueFilter}, {
+                [fieldUpdate]: valueUpdate
+            });
+        }
     } catch (error) {
         console.log(error)
     }finally{
@@ -89,3 +89,7 @@ async function UpdateOne(dbName: string, dbCollection: string, fieldFilter:strin
 }
 
 connect().catch(console.dir);
+
+function elif() {
+    throw new Error('Function not implemented.');
+}
